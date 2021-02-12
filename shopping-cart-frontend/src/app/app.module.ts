@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { PriceListComponent } from './price-list/price-list.component';
 import { PriceCalculatorComponent } from './price-calculator/price-calculator.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { PriceCalculatorComponent } from './price-calculator/price-calculator.co
     PriceCalculatorComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
