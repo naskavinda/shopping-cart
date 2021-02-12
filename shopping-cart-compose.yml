@@ -1,0 +1,20 @@
+version: '3.6'
+
+services:
+  mysql-grocery:
+    image: mysql:8.0.22
+    container_name: mysql-shopping-cart
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+#    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: shopping_cart
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+    - 3307:3306
+    networks:
+      - dev_network
+networks:
+  dev_network:
