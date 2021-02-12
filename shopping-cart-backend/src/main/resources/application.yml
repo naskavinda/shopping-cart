@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:mysql://localhost:3307/shopping_cart
+    username: root
+    password: password
+    initialization-mode: always
