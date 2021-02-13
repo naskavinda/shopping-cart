@@ -9,23 +9,23 @@
       </h5>
     </div>
 
-    <div *ngIf="product.show" id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+    <div *ngIf="product.show" id="collapseOne" class="collapse show mx-2" aria-labelledby="headingOne"
          data-parent="#accordionExample">
       <div class="card-body">
         <table class="table table-striped">
           <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Units</th>
-            <th scope="col">Price</th>
+            <th scope="col" style="text-align:center">Units</th>
+            <th scope="col" style="text-align:center">Price (LKR)</th>
           </tr>
           </thead>
           <tbody>
           <ng-template [ngIf]="productPrice.get(product.id)">
             <tr *ngFor="let priceModel of productPrice.get(product.id).priceModel; let i = index">
               <th scope="row">{{i + 1}}</th>
-              <td>{{priceModel.totalUnits}}</td>
-              <td>{{priceModel.price | number: '1.2-2'}}</td>
+              <td style="text-align:center">{{priceModel.totalUnits}}</td>
+              <td style="text-align:center">{{priceModel.price | number: '1.2-2'}}</td>
             </tr>
           </ng-template>
           </tbody>

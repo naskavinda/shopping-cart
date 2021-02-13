@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PriceCalculatorComponent } from './price-calculator.component';
+import {PriceCalculatorComponent} from './price-calculator.component';
 
 describe('PriceCalculatorComponent', () => {
   let component: PriceCalculatorComponent;

@@ -1,1 +1,57 @@
-<p>price-calculator works!</p>
+<div class="card ml-auto mr-auto mt-5 calculation-card">
+  <div class="card-body mb-0" style="display: flex;">
+
+    <p-autoComplete [(ngModel)]="selectedProduct"
+                    [suggestions]="filteredProducts"
+                    (completeMethod)="filterProduct($event);"
+                    (keyup)="resetToDefault()"
+                    field="name"
+                    [minLength]="1"
+                    placeholder="Search Product">
+
+    </p-autoComplete>
+
+    <div class="btn-group btn-group-toggle ml-3 mr-3 component-height" data-toggle="buttons">
+      <label class="btn btn-primary" [ngClass]="isSelectCarton ? 'active' : ''">
+        <input type="radio" name="options" id="option1" autocomplete="off"
+               [disabled]="!isProductSelected()"
+               (click)="isSelectCarton = true; calculateUnitsAndCartons()"/> Cartons
+      </label>
+      <label class="btn btn-primary" [ngClass]="isSelectCarton ? '' : 'active'">
+        <input type="radio" name="options" id="option2" autocomplete="off"
+               [disabled]="!isProductSelected()"
+               (click)="isSelectCarton = false; calculateUnitsAndCartons()"/> Units
+      </label>
+    </div>
+
+    <div>
+      <input type="text" class="form-control component-height" autocomplete="off" placeholder="Enter quantity"
+             [disabled]="!isProductSelected()"
+             [(ngModel)]="quantity"
+             (keypress)="quantityValidator($event)"
+             (keyup)="calculateUnitsAndCartons()"/>
+    </div>
+
+    <div class="ml-4">
+      <button class="btn btn-success component-height" [disabled]="quantity == null" (click)="calculate()">
+        Calculate
+      </button>
+    </div>
+
+  </div>
+
+  <div class="mt-0" style="display: flex;" *ngIf="isProductSelected()">
+    <div class="mr-3">
+      <strong>Cartons : {{cartons}}</strong>
+    </div>
+    <div class="ml-3">
+      <strong>Units : {{units}}</strong>
+    </div>
+  </div>
+
+</div>
+
+<div class="card ml-auto mr-auto mt-5 circle" *ngIf="price">
+  <strong>LKR {{price | number: '1.2-2'}}</strong>
+</div>
+

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PriceService} from '../service/price.service';
+import {ProductService} from '../service/product.service';
 
 @Component({
   selector: 'app-price-list',
@@ -10,7 +10,7 @@ export class PriceListComponent implements OnInit {
   products: any;
   productPrice = new Map();
 
-  constructor(private priceService: PriceService) {
+  constructor(private priceService: ProductService) {
   }
 
   ngOnInit(): void {

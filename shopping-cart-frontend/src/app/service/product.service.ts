@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PriceService {
+export class ProductService {
 
   private readonly baseUrl: string = environment.restApiBaseUrl;
 
@@ -18,8 +18,18 @@ export class PriceService {
     return this.http.get<any>(url);
   }
 
-  public getProductPrice(productId): Observable<any> {
+  public getProductPrice(productId: number): Observable<any> {
     const url = this.baseUrl + '/api/products/prices/' + productId;
+    return this.http.get<any>(url);
+  }
+
+  public searchProduct(keyword: string): Observable<any> {
+    const url = this.baseUrl + '/api/products/' + keyword;
+    return this.http.get<any>(url);
+  }
+
+  public calculatePrice(productId: number, type: string, qty: number): Observable<any> {
+    const url = this.baseUrl + '/api/products/' + productId + '/' + type + '/' + qty;
     return this.http.get<any>(url);
   }
 }

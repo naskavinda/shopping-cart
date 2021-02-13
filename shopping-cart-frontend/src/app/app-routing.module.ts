@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {PriceCalculatorComponent} from './price-calculator/price-calculator.component';
 import {PriceListComponent} from './price-list/price-list.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
-  { path: 'home', component: PriceCalculatorComponent},
-  { path: 'price-list', component: PriceListComponent}
+  { path: '', redirectTo: 'price/calculator', pathMatch: 'full'},
+  { path: 'price/calculator', component: PriceCalculatorComponent},
+  { path: 'price/list', component: PriceListComponent}
 ];
 
 @NgModule({
