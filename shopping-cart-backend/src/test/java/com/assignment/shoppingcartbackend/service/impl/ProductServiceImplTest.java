@@ -1,8 +1,8 @@
 package com.assignment.shoppingcartbackend.service.impl;
 
 import com.assignment.shoppingcartbackend.dto.ProductPrice;
-import com.assignment.shoppingcartbackend.model.Carton;
-import com.assignment.shoppingcartbackend.model.Product;
+import com.assignment.shoppingcartbackend.entity.Carton;
+import com.assignment.shoppingcartbackend.entity.Product;
 import com.assignment.shoppingcartbackend.repository.CartonRepository;
 import com.assignment.shoppingcartbackend.util.Tuple2;
 import org.junit.jupiter.api.Test;
@@ -59,7 +59,8 @@ class ProductServiceImplTest {
     void ShouldReturnPrice_WhenCartonSizeLessThan_DiscountApplyCartonSize() {
         Product product = new Product(1, "Penguin-ears");
         Carton carton = new Carton(1, 20, 175.00, product);
-        Double price = productService.calculateProductPrice(carton, 2, 0);
+        Tuple2<Integer, Integer> cartonsAndUnits = new Tuple2<>(2, 0);
+        Double price = productService.calculateProductPrice(carton, cartonsAndUnits);
         assertEquals(350.00, price);
     }
 
@@ -67,7 +68,8 @@ class ProductServiceImplTest {
     void ShouldReturnPrice_WhenCartonSizeHigherThan_DiscountApplyCartonSize() {
         Product product = new Product(1, "Penguin-ears");
         Carton carton = new Carton(1, 20, 175.00, product);
-        Double price = productService.calculateProductPrice(carton, 4, 1);
+        Tuple2<Integer, Integer> cartonsAndUnits = new Tuple2<>(4, 1);
+        Double price = productService.calculateProductPrice(carton, cartonsAndUnits);
         assertEquals(640.24, price);
     }
 
@@ -75,7 +77,8 @@ class ProductServiceImplTest {
     void ShouldReturnPrice_WhenCartonSizeEqual_DiscountApplyCartonSize() {
         Product product = new Product(1, "Penguin-ears");
         Carton carton = new Carton(1, 20, 175.00, product);
-        Double price = productService.calculateProductPrice(carton, 3, 1);
+        Tuple2<Integer, Integer> cartonsAndUnits = new Tuple2<>(3, 1);
+        Double price = productService.calculateProductPrice(carton, cartonsAndUnits);
         assertEquals(482.74, price);
     }
 
@@ -83,7 +86,8 @@ class ProductServiceImplTest {
     void ShouldReturnPrice_WhenCartonIs_Zero_And_UnitsHas_Value() {
         Product product = new Product(1, "Penguin-ears");
         Carton carton = new Carton(1, 20, 175.00, product);
-        Double price = productService.calculateProductPrice(carton, 0, 10);
+        Tuple2<Integer, Integer> cartonsAndUnits = new Tuple2<>(0, 10);
+        Double price = productService.calculateProductPrice(carton, cartonsAndUnits);
         assertEquals(113.75, price);
     }
 

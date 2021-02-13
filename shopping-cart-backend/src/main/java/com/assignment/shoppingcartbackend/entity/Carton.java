@@ -1,4 +1,4 @@
-package com.assignment.shoppingcartbackend.model;
+package com.assignment.shoppingcartbackend.entity;
 
 import lombok.*;
 
@@ -19,7 +19,7 @@ public class Carton {
     private Integer unitsPerCarton;
     private Double price;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(referencedColumnName = "id", nullable = false)
     private Product product;
 }

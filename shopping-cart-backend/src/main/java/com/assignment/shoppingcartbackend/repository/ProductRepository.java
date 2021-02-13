@@ -1,6 +1,6 @@
 package com.assignment.shoppingcartbackend.repository;
 
-import com.assignment.shoppingcartbackend.model.Product;
+import com.assignment.shoppingcartbackend.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

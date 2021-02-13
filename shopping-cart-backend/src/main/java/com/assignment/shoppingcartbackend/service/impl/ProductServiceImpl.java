@@ -1,11 +1,12 @@
 package com.assignment.shoppingcartbackend.service.impl;
 
 import com.assignment.shoppingcartbackend.dto.PriceModel;
+import com.assignment.shoppingcartbackend.dto.ProductDetails;
 import com.assignment.shoppingcartbackend.dto.ProductPrice;
-import com.assignment.shoppingcartbackend.model.Product;
-import com.assignment.shoppingcartbackend.model.Carton;
-import com.assignment.shoppingcartbackend.repository.ProductRepository;
+import com.assignment.shoppingcartbackend.entity.Carton;
+import com.assignment.shoppingcartbackend.entity.Product;
 import com.assignment.shoppingcartbackend.repository.CartonRepository;
+import com.assignment.shoppingcartbackend.repository.ProductRepository;
 import com.assignment.shoppingcartbackend.service.ProductService;
 import com.assignment.shoppingcartbackend.util.Tuple2;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,19 +34,41 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> searchProducts(String keyword) {
-        return productRepository.findProductsByProductNameContains(keyword);
+    public List<ProductDetails> searchProducts(String keyword) {
+        return productRepository.findProductsByProductNameContains(keyword)
+                .stream().map(Product::getId)
+                .map(cartonRepository::findCartonByProductId)
+                .map(ProductServiceImpl::mapToProductDetails)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<ProductDetails> getProducts() {
+        return cartonRepository.findAll().stream()
+                .map(ProductServiceImpl::mapToProductDetails)
+                .collect(Collectors.toList());
+    }
+
+    private static ProductDetails mapToProductDetails(Carton carton) {
+        Product product = carton.getProduct();
+        return new ProductDetails(product.getId(), product.getProductName(), carton.getUnitsPerCarton());
     }
 
     @Override
-    public Double calculatePrice(Integer productId, Integer cartons, Integer units) {
+    public Double calculatePrice(Integer productId, String type, Integer qty) {
         Carton carton = cartonRepository.findCartonByProductId(productId);
-        return calculateProductPrice(carton, cartons, units);
+        Tuple2<Integer, Integer> cartonsAndUnits = calculateCartonsAndUnits(type, qty, carton);
+        return calculateProductPrice(carton, cartonsAndUnits);
+    }
+
+    private Tuple2<Integer, Integer> calculateCartonsAndUnits(String type, Integer qty, Carton carton) {
+        Tuple2<Integer, Integer> cartonsAndUnits;
+        if (type.equals("cartons")) {
+            cartonsAndUnits = new Tuple2<>(qty, 0);
+        } else {
+            cartonsAndUnits = calculateCartonsAndUnits(qty, carton.getUnitsPerCarton());
+        }
+        return cartonsAndUnits;
     }
 
     @Override
@@ -54,16 +78,17 @@ public class ProductServiceImpl implements ProductService {
         List<PriceModel> priceModel = new ArrayList<>();
         for (int i = 1; i <= productCount; i++) {
             Tuple2<Integer, Integer> cartonsAndUnits = calculateCartonsAndUnits(i, carton.getUnitsPerCarton());
-            Integer cartons = cartonsAndUnits.getFirst();
-            Integer units = cartonsAndUnits.getSecond();
-            Double price = calculateProductPrice(carton, cartons, units);
+
+            Double price = calculateProductPrice(carton, cartonsAndUnits);
 
             priceModel.add(new PriceModel(i, price));
         }
         return new ProductPrice(carton.getProduct().getId(), carton.getProduct().getProductName(), priceModel);
     }
 
-    protected Double calculateProductPrice(Carton carton, int cartons, int units) {
+    protected Double calculateProductPrice(Carton carton, Tuple2<Integer, Integer> cartonsAndUnits) {
+        Integer cartons = cartonsAndUnits.getFirst();
+        Integer units = cartonsAndUnits.getSecond();
         double actualCartonPrice = getActualCartonPrice(carton.getPrice(), cartons);
         double unitPrice = 0.0;
         if (units > 0) {
