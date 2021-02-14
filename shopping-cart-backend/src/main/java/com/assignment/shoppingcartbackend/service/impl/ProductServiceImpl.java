@@ -9,6 +9,7 @@ import com.assignment.shoppingcartbackend.repository.CartonRepository;
 import com.assignment.shoppingcartbackend.repository.ProductRepository;
 import com.assignment.shoppingcartbackend.service.ProductService;
 import com.assignment.shoppingcartbackend.util.Tuple2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -19,9 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private static final int MIN_DISCOUNT_APPLY_SIZE = 3;
-    private static final double PRICE_FACTOR_WITH_DISCOUNT = 0.9;
-    private static final double PRICE_FACTOR_WITH_INCREMENT = 1.3;
+    @Value("${app.discount.min.size}")
+    private int minDiscountApplySize;
+    @Value("${app.factor.discount}")
+    private double priceFactorWithDiscount;
+    @Value("${app.factor.increase}")
+    private double priceFactorWithIncrease;
 
     private final ProductRepository productRepository;
     private final CartonRepository cartonRepository;
@@ -101,14 +105,14 @@ public class ProductServiceImpl implements ProductService {
 
     protected Double getActualCartonPrice(Double cartonPrice, Integer cartons) {
         Double actualPrice = cartonPrice;
-        if (cartons >= MIN_DISCOUNT_APPLY_SIZE) {
-            actualPrice = cartonPrice * PRICE_FACTOR_WITH_DISCOUNT;
+        if (cartons >= minDiscountApplySize) {
+            actualPrice = cartonPrice * priceFactorWithDiscount;
         }
         return actualPrice;
     }
 
     protected Double getUnitPrice(int unitsPerCarton, Double actualCartonPrice) {
-        return (actualCartonPrice * PRICE_FACTOR_WITH_INCREMENT) / unitsPerCarton;
+        return (actualCartonPrice * priceFactorWithIncrease) / unitsPerCarton;
     }
 
     protected Tuple2<Integer, Integer> calculateCartonsAndUnits(Integer totalUnits, Integer unitsPerCarton) {

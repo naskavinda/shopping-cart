@@ -7,3 +7,11 @@ spring:
     username: root
     password: password
     initialization-mode: always
+
+app:
+  factor:
+    discount: 0.9
+    increase: 1.3
+  discount:
+    min:
+      size: 3
