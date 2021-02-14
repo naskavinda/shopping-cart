@@ -1,7 +1,7 @@
 version: '3.6'
 
 services:
-  mysql-grocery:
+  mysql-shopping:
     image: mysql:8.0.22
     container_name: mysql-shopping-cart
     volumes:
